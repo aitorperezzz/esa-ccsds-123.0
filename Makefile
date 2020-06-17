@@ -30,7 +30,7 @@ CCFLAGS=-g -Wall -Iinc
 CC=g++
 
 #all: compressor converter decompressor
-all: compression
+all: test
 
 #compressor_main.o: ../compressor_main.c ../entropy_encoder.h ../predictor.h Makefile
 #	$(CC) $(CCFLAGS) -DNO_COMPUTE_LOCAL -c -o compressor_main.o ../compressor_main.c
@@ -59,7 +59,10 @@ obj/unpredict.o: src/unpredict.c inc/unpredict.h inc/utils.h inc/predictor.h Mak
 obj/decoder.o: src/decoder.c inc/decoder.h inc/utils.h Makefile
 	$(CC) $(CCFLAGS) -c -o obj/decoder.o src/decoder.c
 
-obj/main.o: main.cpp inc/predictor.h inc/entropy_encoder.h Makefile
+obj/compress.o: compress.c compress.h inc/utils.h inc/entropy_encoder.h inc/predictor.h Makefile
+	$(CC) $(CCFLAGS) -c -o obj/compress.o compress.c
+
+obj/main.o: main.cpp compress.h Makefile
 	$(CC) $(CCFLAGS) -c -o obj/main.o main.cpp
 
 #decompressor: decompressor_main.o utils.o unpredict.o decoder.o predictor_nolocal.o Makefile
@@ -71,9 +74,10 @@ obj/main.o: main.cpp inc/predictor.h inc/entropy_encoder.h Makefile
 #converter: converter.o entropy_encoder.o predictor.o utils.o Makefile
 #	$(CC) $(CCFLAGS) -o converter converter.o entropy_encoder.o predictor.o utils.o $(LINK_FLAGS)
 
-compression: obj/main.o obj/entropy_encoder.o obj/predictor.o obj/utils.o Makefile
-	$(CC) $(CCFLAGS) -o compression obj/main.o obj/entropy_encoder.o obj/predictor.o obj/utils.o $(LINK_FLAGS)
+test: obj/main.o obj/compress.o obj/entropy_encoder.o obj/predictor.o obj/utils.o Makefile
+	$(CC) $(CCFLAGS) -o test obj/main.o obj/compress.o obj/entropy_encoder.o obj/predictor.o obj/utils.o $(LINK_FLAGS)
 
 clean:
 #	rm -rf compressor converter decompressor *.o *~ ../*~
-	rm -rf obj/*
+	-rm -rf obj/*
+	-rm test
