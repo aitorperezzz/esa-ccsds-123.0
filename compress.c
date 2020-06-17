@@ -18,19 +18,8 @@ int compress(compressConfig_t *config)
 	unsigned int compressed_bytes = 0;
 	unsigned int dump_residuals = 0;
 
-	// Initialization of some default values.
+	// Initialization of some values.
 	unsigned short int *residuals = NULL;
-	config->samples_file[0] = '\x0';
-	config->out_file[0] = '\x0';
-	config->init_table_file[0] = '\x0';
-	config->init_weight_file[0] = '\x0';
-	memset(&config->input_params, 0, sizeof(input_feature_t));
-	memset(&config->encoder_params, 0, sizeof(encoder_config_t));
-	memset(&config->predictor_params, 0, sizeof(predictor_config_t));
-	config->encoder_params.k = (unsigned int)-1;
-	config->input_params.dyn_range = 16;
-	config->encoder_params.encoding_method = BLOCK;
-
 
 	// Perform a few checks that the necessary options have been provided.
 	if (config->samples_file[0] == '\x0')
