@@ -28,6 +28,11 @@ if You have been advised of the possibility of such damages.
 XXXXXXXXXXXXXXXXXXXXXXX
 */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #ifndef DECODER_H
 #define DECODER_H
 
@@ -97,4 +102,8 @@ int read_header(FILE *compressedStream, input_feature_t *input_params, encoder_c
 int decode(input_feature_t *input_params, predictor_config_t *predictor_params,
 		   unsigned short int **residuals, char inputFile[128]);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

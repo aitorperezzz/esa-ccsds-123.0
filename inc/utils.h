@@ -28,14 +28,17 @@ Miscellaneous routines to be used by the entrpy encoder and the
 predictor
 */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #ifndef UTILS_H
 #define UTILS_H
 
-#define MIN(x, y) ((x) < (y) ? x : y)
+#include <stdio.h>
 
-#ifdef WIN32
-#define log2(x) (log((double)(x)) / log((double)2))
-#endif
+#define MIN(x, y) ((x) < (y) ? x : y)
 
 #define SEGMENT_SIZE 64
 
@@ -162,4 +165,8 @@ unsigned int indexToBSQ(interleaving_t interleaving, unsigned int interleaving_d
 unsigned int BSQToIndex(interleaving_t interleaving, unsigned int interleaving_depth,
 						unsigned int x_size, unsigned int y_size, unsigned int z_size, unsigned int index);
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif

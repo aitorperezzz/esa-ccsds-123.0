@@ -30,6 +30,11 @@ LOSSLESS MULTISPECTRAL & HYPERSPECTRAL IMAGE COMPRESSION
 as of 09/11/2011.
 */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
 #ifndef PREDICTOR_H
 #define PREDICTOR_H
 
@@ -107,4 +112,8 @@ int predict(input_feature_t input_params, predictor_config_t predictor_params, c
 /// NOTE: we execute the computation in BSQ order, for simplicity; this means that conversion
 /// from the input format into BSQ might be needed.
 
+#endif
+
+#ifdef __cplusplus
+}
 #endif
