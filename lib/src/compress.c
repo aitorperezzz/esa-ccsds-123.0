@@ -192,8 +192,8 @@ int compress(compressConfig_t *config)
 			}
 		}
 		if (parse_weights_table(config->init_weight_file, config->predictor_params.weight_init_table,
-								(0x1 << (config->predictor_params.weight_init_resolution - 1)) - 1, -1 * (0x1 << (config->predictor_params.weight_init_resolution - 1)),
-								config->input_params.z_size * prediction_len, prediction_len) != 0)
+					(0x1 << (config->predictor_params.weight_init_resolution - 1)) - 1, -1 * (0x1 << (config->predictor_params.weight_init_resolution - 1)),
+					config->input_params.z_size * prediction_len, prediction_len) != 0)
 		{
 			fprintf(stderr, "\nError, in parsing the weights initialization table\n\n");
 			return -1;
@@ -268,7 +268,7 @@ int compress(compressConfig_t *config)
 	}
 	if (residuals != NULL)
 		free(residuals);
-	
+
 	// Print out some statistics.
 	printf("Overall Compression duration %lf (sec)\n", compressionEndTime - compressionStartTime);
 	printf("Prediction duration %lf (sec)\n", predictionEndTime - compressionStartTime);

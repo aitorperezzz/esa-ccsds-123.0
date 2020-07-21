@@ -1,40 +1,40 @@
 /*
-Luca Fossati (Luca.Fossati@esa.int), European Space Agency
+   Luca Fossati (Luca.Fossati@esa.int), European Space Agency
 
-Software distributed under the "European Space Agency Public License � v2.0".
+   Software distributed under the "European Space Agency Public License � v2.0".
 
-All Distribution of the Software and/or Modifications, as Source Code or Object Code,
-must be, as a whole, under the terms of the European Space Agency Public License � v2.0.
-If You Distribute the Software and/or Modifications as Object Code, You must:
-(a)	provide in addition a copy of the Source Code of the Software and/or
-Modifications to each recipient; or
-(b)	make the Source Code of the Software and/or Modifications freely accessible by reasonable
-means for anyone who possesses the Object Code or received the Software and/or Modifications
-from You, and inform recipients how to obtain a copy of the Source Code.
+   All Distribution of the Software and/or Modifications, as Source Code or Object Code,
+   must be, as a whole, under the terms of the European Space Agency Public License � v2.0.
+   If You Distribute the Software and/or Modifications as Object Code, You must:
+   (a)	provide in addition a copy of the Source Code of the Software and/or
+   Modifications to each recipient; or
+   (b)	make the Source Code of the Software and/or Modifications freely accessible by reasonable
+   means for anyone who possesses the Object Code or received the Software and/or Modifications
+   from You, and inform recipients how to obtain a copy of the Source Code.
 
-The Software is provided to You on an �as is� basis and without warranties of any
-kind, including without limitation merchantability, fitness for a particular purpose,
-absence of defects or errors, accuracy or non-infringement of intellectual property
-rights.
-Except as expressly set forth in the "European Space Agency Public License � v2.0",
-neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
-incidental, or consequential damages (including without limitation loss of profit),
-however caused and on any theory of liability, arising in any way out of the use or
-Distribution of the Software or the exercise of any rights under this License, even
-if You have been advised of the possibility of such damages.
+   The Software is provided to You on an �as is� basis and without warranties of any
+   kind, including without limitation merchantability, fitness for a particular purpose,
+   absence of defects or errors, accuracy or non-infringement of intellectual property
+   rights.
+   Except as expressly set forth in the "European Space Agency Public License � v2.0",
+   neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
+   incidental, or consequential damages (including without limitation loss of profit),
+   however caused and on any theory of liability, arising in any way out of the use or
+   Distribution of the Software or the exercise of any rights under this License, even
+   if You have been advised of the possibility of such damages.
 
-*****************************************************************************************
-Command line interface for the lossless compressor for hyperspectral and multispectral images 
-according to the Draft Recommended Standard CCSDS 123.0-R-1 as of 09/11/2011.
-*/
+ *****************************************************************************************
+ Command line interface for the lossless compressor for hyperspectral and multispectral images 
+ according to the Draft Recommended Standard CCSDS 123.0-R-1 as of 09/11/2011.
+ */
 
 /*
-USAGE
-compressor --input original_samples --output compressedImage --rows num_rows --columns num_col --bands num_bands
---in_format [BSQ|BI] --in_depth num --in_byte_ordering [LITTLE|big] --dyn_range num --word_len num --out_format [BSQ|bi]
---out_depth num --signed_sample --pred_bands num --full --neighbour_sum --reg_size num --w_resolution num --w_interval num
---w_initial num --w_final num --w_init_resolution num --weight_init_file file_path --sample_adaptive --u_max num
---y_star num --y_0 num --k num --k_init_file file_path --block_size num -- restricted_enc --ref_interval num --reg_input
+   USAGE
+   compressor --input original_samples --output compressedImage --rows num_rows --columns num_col --bands num_bands
+   --in_format [BSQ|BI] --in_depth num --in_byte_ordering [LITTLE|big] --dyn_range num --word_len num --out_format [BSQ|bi]
+   --out_depth num --signed_sample --pred_bands num --full --neighbour_sum --reg_size num --w_resolution num --w_interval num
+   --w_initial num --w_final num --w_init_resolution num --weight_init_file file_path --sample_adaptive --u_max num
+   --y_star num --y_0 num --k num --k_init_file file_path --block_size num -- restricted_enc --ref_interval num --reg_input
 
 */
 
@@ -59,10 +59,10 @@ compressor --input original_samples --output compressedImage --rows num_rows --c
 
 //String specifying the program command line
 #define USAGE_STRING "Usage: %s --input original_samples --output compressedImage --rows num_rows --columns num_col --bands num_bands \
---in_format [BSQ|BI] --in_depth num --in_byte_ordering [LITTLE|big] --dyn_range num --word_len num --out_format [BSQ|bi] \
---out_depth num --signed_sample --pred_bands num --full --neighbour_sum --reg_size num --w_resolution num --w_interval num \
---w_initial num --w_final num --w_init_resolution num --weight_init_file file_path --sample_adaptive --u_max num \
---y_star num --y_0 num --k num --k_init_file file_path --block_size num -- restricted_enc --ref_interval num --reg_input\n"
+	--in_format [BSQ|BI] --in_depth num --in_byte_ordering [LITTLE|big] --dyn_range num --word_len num --out_format [BSQ|bi] \
+	--out_depth num --signed_sample --pred_bands num --full --neighbour_sum --reg_size num --w_resolution num --w_interval num \
+	--w_initial num --w_final num --w_init_resolution num --weight_init_file file_path --sample_adaptive --u_max num \
+	--y_star num --y_0 num --k num --k_init_file file_path --block_size num -- restricted_enc --ref_interval num --reg_input\n"
 
 //Lets declare the available program options: lets start
 //with their long description...
@@ -144,161 +144,161 @@ int main(int argc, char *argv[])
 		foundOpt = getopt_long(argc, argv, "", options, NULL);
 		switch (foundOpt)
 		{
-		case 1:
-			strcpy(samples_file, optarg);
-			break;
-		case 2:
-			strcpy(out_file, optarg);
-			break;
-		case 3:
-			input_params.y_size = (unsigned int)atoi(optarg);
-			break;
-		case 4:
-			input_params.x_size = (unsigned int)atoi(optarg);
-			break;
-		case 5:
-			input_params.z_size = (unsigned int)atoi(optarg);
-			break;
-		case 6:
-			if (strcmp(optarg, "BI") == 0 || strcmp(optarg, "bi") == 0)
-			{
-				input_params.in_interleaving = BI;
-			}
-			else if (strcmp(optarg, "BSQ") == 0 || strcmp(optarg, "bsq") == 0)
-			{
-				input_params.in_interleaving = BSQ;
-			}
-			else
-			{
-				fprintf(stderr, "\nError, %s unknown input image format\n\n", optarg);
+			case 1:
+				strcpy(samples_file, optarg);
+				break;
+			case 2:
+				strcpy(out_file, optarg);
+				break;
+			case 3:
+				input_params.y_size = (unsigned int)atoi(optarg);
+				break;
+			case 4:
+				input_params.x_size = (unsigned int)atoi(optarg);
+				break;
+			case 5:
+				input_params.z_size = (unsigned int)atoi(optarg);
+				break;
+			case 6:
+				if (strcmp(optarg, "BI") == 0 || strcmp(optarg, "bi") == 0)
+				{
+					input_params.in_interleaving = BI;
+				}
+				else if (strcmp(optarg, "BSQ") == 0 || strcmp(optarg, "bsq") == 0)
+				{
+					input_params.in_interleaving = BSQ;
+				}
+				else
+				{
+					fprintf(stderr, "\nError, %s unknown input image format\n\n", optarg);
+					fprintf(stderr, USAGE_STRING, argv[0]);
+					return -1;
+				}
+				break;
+			case 7:
+				input_params.in_interleaving_depth = (unsigned int)atoi(optarg);
+				break;
+			case 8:
+				if (strcmp(optarg, "little") == 0 || strcmp(optarg, "LITTLE") == 0)
+				{
+					input_params.byte_ordering = LITTLE;
+				}
+				else if (strcmp(optarg, "big") == 0 || strcmp(optarg, "BIG") == 0)
+				{
+					input_params.byte_ordering = BIG;
+				}
+				else
+				{
+					fprintf(stderr, "\nError, %s unknown input byte ordering\n\n", optarg);
+					fprintf(stderr, USAGE_STRING, argv[0]);
+					return -1;
+				}
+				break;
+			case 9:
+				if (strcmp(optarg, "BI") == 0 || strcmp(optarg, "bi") == 0)
+				{
+					encoder_params.out_interleaving = BI;
+				}
+				else if (strcmp(optarg, "BSQ") == 0 || strcmp(optarg, "bsq") == 0)
+				{
+					encoder_params.out_interleaving = BSQ;
+				}
+				else
+				{
+					fprintf(stderr, "\nError, %s unknown image format\n\n", optarg);
+					fprintf(stderr, USAGE_STRING, argv[0]);
+					return -1;
+				}
+				break;
+			case 10:
+				encoder_params.out_interleaving_depth = (unsigned int)atoi(optarg);
+				break;
+			case 12:
+				encoder_params.u_max = (unsigned int)atoi(optarg);
+				break;
+			case 13:
+				encoder_params.y_star = (unsigned int)atoi(optarg);
+				break;
+			case 14:
+				encoder_params.y_0 = (unsigned int)atoi(optarg);
+				break;
+			case 15:
+				encoder_params.k = (unsigned int)atoi(optarg);
+				break;
+			case 16:
+				strcpy(init_table_file, optarg);
+				break;
+			case 17:
+				fprintf(stderr, USAGE_STRING, argv[0]);
+				return 0;
+				break;
+			case 18:
+				input_params.dyn_range = (unsigned int)atoi(optarg);
+				break;
+			case 19:
+				encoder_params.out_wordsize = (unsigned int)atoi(optarg);
+				break;
+			case 20:
+				input_params.signed_samples = 1;
+				break;
+			case 21:
+				predictor_params.pred_bands = (unsigned int)atoi(optarg);
+				predictor_params.user_input_pred_bands = predictor_params.pred_bands;
+				break;
+			case 22:
+				predictor_params.full = 1;
+				break;
+			case 23:
+				predictor_params.neighbour_sum = 1;
+				break;
+			case 24:
+				predictor_params.register_size = (unsigned int)atoi(optarg);
+				break;
+			case 25:
+				predictor_params.weight_resolution = (unsigned char)atoi(optarg);
+				break;
+			case 26:
+				predictor_params.weight_interval = (int)atoi(optarg);
+				break;
+			case 27:
+				predictor_params.weight_initial = (char)atoi(optarg);
+				break;
+			case 28:
+				predictor_params.weight_final = (char)atoi(optarg);
+				break;
+			case 29:
+				predictor_params.weight_init_resolution = (unsigned char)atoi(optarg);
+				break;
+			case 30:
+				strcpy(init_weight_file, optarg);
+				break;
+			case 31:
+				encoder_params.encoding_method = SAMPLE;
+				break;
+			case 32:
+				encoder_params.block_size = (unsigned int)atoi(optarg);
+				break;
+			case 33:
+				encoder_params.restricted = 1;
+				break;
+			case 34:
+				encoder_params.ref_interval = (unsigned int)atoi(optarg);
+				break;
+			case 35:
+				dump_residuals = 1;
+				break;
+			case 36:
+				input_params.regular_input = 1;
+				break;
+			case -1:
+				//Do nothing, we have finished parsing the options
+				break;
+			case '?':
+			default:
+				fprintf(stderr, "\nError in the program command line!!\n\n");
 				fprintf(stderr, USAGE_STRING, argv[0]);
 				return -1;
-			}
-			break;
-		case 7:
-			input_params.in_interleaving_depth = (unsigned int)atoi(optarg);
-			break;
-		case 8:
-			if (strcmp(optarg, "little") == 0 || strcmp(optarg, "LITTLE") == 0)
-			{
-				input_params.byte_ordering = LITTLE;
-			}
-			else if (strcmp(optarg, "big") == 0 || strcmp(optarg, "BIG") == 0)
-			{
-				input_params.byte_ordering = BIG;
-			}
-			else
-			{
-				fprintf(stderr, "\nError, %s unknown input byte ordering\n\n", optarg);
-				fprintf(stderr, USAGE_STRING, argv[0]);
-				return -1;
-			}
-			break;
-		case 9:
-			if (strcmp(optarg, "BI") == 0 || strcmp(optarg, "bi") == 0)
-			{
-				encoder_params.out_interleaving = BI;
-			}
-			else if (strcmp(optarg, "BSQ") == 0 || strcmp(optarg, "bsq") == 0)
-			{
-				encoder_params.out_interleaving = BSQ;
-			}
-			else
-			{
-				fprintf(stderr, "\nError, %s unknown image format\n\n", optarg);
-				fprintf(stderr, USAGE_STRING, argv[0]);
-				return -1;
-			}
-			break;
-		case 10:
-			encoder_params.out_interleaving_depth = (unsigned int)atoi(optarg);
-			break;
-		case 12:
-			encoder_params.u_max = (unsigned int)atoi(optarg);
-			break;
-		case 13:
-			encoder_params.y_star = (unsigned int)atoi(optarg);
-			break;
-		case 14:
-			encoder_params.y_0 = (unsigned int)atoi(optarg);
-			break;
-		case 15:
-			encoder_params.k = (unsigned int)atoi(optarg);
-			break;
-		case 16:
-			strcpy(init_table_file, optarg);
-			break;
-		case 17:
-			fprintf(stderr, USAGE_STRING, argv[0]);
-			return 0;
-			break;
-		case 18:
-			input_params.dyn_range = (unsigned int)atoi(optarg);
-			break;
-		case 19:
-			encoder_params.out_wordsize = (unsigned int)atoi(optarg);
-			break;
-		case 20:
-			input_params.signed_samples = 1;
-			break;
-		case 21:
-			predictor_params.pred_bands = (unsigned int)atoi(optarg);
-			predictor_params.user_input_pred_bands = predictor_params.pred_bands;
-			break;
-		case 22:
-			predictor_params.full = 1;
-			break;
-		case 23:
-			predictor_params.neighbour_sum = 1;
-			break;
-		case 24:
-			predictor_params.register_size = (unsigned int)atoi(optarg);
-			break;
-		case 25:
-			predictor_params.weight_resolution = (unsigned char)atoi(optarg);
-			break;
-		case 26:
-			predictor_params.weight_interval = (int)atoi(optarg);
-			break;
-		case 27:
-			predictor_params.weight_initial = (char)atoi(optarg);
-			break;
-		case 28:
-			predictor_params.weight_final = (char)atoi(optarg);
-			break;
-		case 29:
-			predictor_params.weight_init_resolution = (unsigned char)atoi(optarg);
-			break;
-		case 30:
-			strcpy(init_weight_file, optarg);
-			break;
-		case 31:
-			encoder_params.encoding_method = SAMPLE;
-			break;
-		case 32:
-			encoder_params.block_size = (unsigned int)atoi(optarg);
-			break;
-		case 33:
-			encoder_params.restricted = 1;
-			break;
-		case 34:
-			encoder_params.ref_interval = (unsigned int)atoi(optarg);
-			break;
-		case 35:
-			dump_residuals = 1;
-			break;
-		case 36:
-			input_params.regular_input = 1;
-			break;
-		case -1:
-			//Do nothing, we have finished parsing the options
-			break;
-		case '?':
-		default:
-			fprintf(stderr, "\nError in the program command line!!\n\n");
-			fprintf(stderr, USAGE_STRING, argv[0]);
-			return -1;
-			break;
+				break;
 		}
 	} while (foundOpt >= 0);
 
@@ -497,8 +497,8 @@ int main(int argc, char *argv[])
 			}
 		}
 		if (parse_weights_table(init_weight_file, predictor_params.weight_init_table,
-								(0x1 << (predictor_params.weight_init_resolution - 1)) - 1, -1 * (0x1 << (predictor_params.weight_init_resolution - 1)),
-								input_params.z_size * prediction_len, prediction_len) != 0)
+					(0x1 << (predictor_params.weight_init_resolution - 1)) - 1, -1 * (0x1 << (predictor_params.weight_init_resolution - 1)),
+					input_params.z_size * prediction_len, prediction_len) != 0)
 		{
 			fprintf(stderr, "\nError, in parsing the weights initialization table\n\n");
 			return -1;

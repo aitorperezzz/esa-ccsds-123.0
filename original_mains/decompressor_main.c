@@ -1,37 +1,37 @@
 /*
-Luca Fossati (Luca.Fossati@esa.int), European Space Agency
+   Luca Fossati (Luca.Fossati@esa.int), European Space Agency
 
-Software distributed under the "European Space Agency Public License � v2.0".
+   Software distributed under the "European Space Agency Public License � v2.0".
 
-All Distribution of the Software and/or Modifications, as Source Code or Object Code,
-must be, as a whole, under the terms of the European Space Agency Public License � v2.0.
-If You Distribute the Software and/or Modifications as Object Code, You must:
-(a)	provide in addition a copy of the Source Code of the Software and/or
-Modifications to each recipient; or
-(b)	make the Source Code of the Software and/or Modifications freely accessible by reasonable
-means for anyone who possesses the Object Code or received the Software and/or Modifications
-from You, and inform recipients how to obtain a copy of the Source Code.
+   All Distribution of the Software and/or Modifications, as Source Code or Object Code,
+   must be, as a whole, under the terms of the European Space Agency Public License � v2.0.
+   If You Distribute the Software and/or Modifications as Object Code, You must:
+   (a)	provide in addition a copy of the Source Code of the Software and/or
+   Modifications to each recipient; or
+   (b)	make the Source Code of the Software and/or Modifications freely accessible by reasonable
+   means for anyone who possesses the Object Code or received the Software and/or Modifications
+   from You, and inform recipients how to obtain a copy of the Source Code.
 
-The Software is provided to You on an �as is� basis and without warranties of any
-kind, including without limitation merchantability, fitness for a particular purpose,
-absence of defects or errors, accuracy or non-infringement of intellectual property
-rights.
-Except as expressly set forth in the "European Space Agency Public License � v2.0",
-neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
-incidental, or consequential damages (including without limitation loss of profit),
-however caused and on any theory of liability, arising in any way out of the use or
-Distribution of the Software or the exercise of any rights under this License, even
-if You have been advised of the possibility of such damages.
+   The Software is provided to You on an �as is� basis and without warranties of any
+   kind, including without limitation merchantability, fitness for a particular purpose,
+   absence of defects or errors, accuracy or non-infringement of intellectual property
+   rights.
+   Except as expressly set forth in the "European Space Agency Public License � v2.0",
+   neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
+   incidental, or consequential damages (including without limitation loss of profit),
+   however caused and on any theory of liability, arising in any way out of the use or
+   Distribution of the Software or the exercise of any rights under this License, even
+   if You have been advised of the possibility of such damages.
 
-*****************************************************************************************
-Command line interface for the lossless compressor for hyperspectral and multispectral images 
-according to the Draft Recommended Standard CCSDS 123.0-R-1 as of 09/11/2011.
-*/
+ *****************************************************************************************
+ Command line interface for the lossless compressor for hyperspectral and multispectral images 
+ according to the Draft Recommended Standard CCSDS 123.0-R-1 as of 09/11/2011.
+ */
 
 /*
-USAGE
-decompressor --input compressedImage --output uncompressedImage --out_format [BSQ|bi] --out_depth num --dump_residuals
-*/
+   USAGE
+   decompressor --input compressedImage --output uncompressedImage --out_format [BSQ|bi] --out_depth num --dump_residuals
+   */
 
 #ifdef WIN32
 #define _CRT_SECURE_NO_WARNINGS
@@ -54,7 +54,7 @@ decompressor --input compressedImage --output uncompressedImage --out_format [BS
 
 //String specifying the program command line
 #define USAGE_STRING "Usage: %s --input compressedImage --output uncompressedImage --out_format [BSQ|bi] --out_depth num \
---out_byte_ordering [LITTLE|big] --dump_residuals\n"
+	--out_byte_ordering [LITTLE|big] --dump_residuals\n"
 
 //Lets declare the available program options: lets start
 //with their long description...
@@ -99,59 +99,59 @@ int main(int argc, char *argv[])
 		foundOpt = getopt_long(argc, argv, "", options, NULL);
 		switch (foundOpt)
 		{
-		case 1:
-			strcpy(in_file, optarg);
-			break;
-		case 2:
-			strcpy(out_file, optarg);
-			break;
-		case 3:
-			if (strcmp(optarg, "BI") == 0 || strcmp(optarg, "bi") == 0)
-			{
-				input_params.in_interleaving = BI;
-			}
-			else if (strcmp(optarg, "BSQ") == 0 || strcmp(optarg, "bsq") == 0)
-			{
-				input_params.in_interleaving = BSQ;
-			}
-			else
-			{
-				fprintf(stderr, "\nError, %s unknown image format\n\n", optarg);
+			case 1:
+				strcpy(in_file, optarg);
+				break;
+			case 2:
+				strcpy(out_file, optarg);
+				break;
+			case 3:
+				if (strcmp(optarg, "BI") == 0 || strcmp(optarg, "bi") == 0)
+				{
+					input_params.in_interleaving = BI;
+				}
+				else if (strcmp(optarg, "BSQ") == 0 || strcmp(optarg, "bsq") == 0)
+				{
+					input_params.in_interleaving = BSQ;
+				}
+				else
+				{
+					fprintf(stderr, "\nError, %s unknown image format\n\n", optarg);
+					fprintf(stderr, USAGE_STRING, argv[0]);
+					return -1;
+				}
+				break;
+			case 4:
+				input_params.in_interleaving_depth = (unsigned int)atoi(optarg);
+				break;
+			case 5:
+				dump_residuals = 1;
+				break;
+			case 6:
+				if (strcmp(optarg, "little") == 0 || strcmp(optarg, "LITTLE") == 0)
+				{
+					input_params.byte_ordering = LITTLE;
+				}
+				else if (strcmp(optarg, "big") == 0 || strcmp(optarg, "BIG") == 0)
+				{
+					input_params.byte_ordering = BIG;
+				}
+				else
+				{
+					fprintf(stderr, "\nError, %s unknown input byte ordering\n\n", optarg);
+					fprintf(stderr, USAGE_STRING, argv[0]);
+					return -1;
+				}
+				break;
+			case -1:
+				//Do nothing, we have finished parsing the options
+				break;
+			case '?':
+			default:
+				fprintf(stderr, "\nError in the program command line!!\n\n");
 				fprintf(stderr, USAGE_STRING, argv[0]);
 				return -1;
-			}
-			break;
-		case 4:
-			input_params.in_interleaving_depth = (unsigned int)atoi(optarg);
-			break;
-		case 5:
-			dump_residuals = 1;
-			break;
-		case 6:
-			if (strcmp(optarg, "little") == 0 || strcmp(optarg, "LITTLE") == 0)
-			{
-				input_params.byte_ordering = LITTLE;
-			}
-			else if (strcmp(optarg, "big") == 0 || strcmp(optarg, "BIG") == 0)
-			{
-				input_params.byte_ordering = BIG;
-			}
-			else
-			{
-				fprintf(stderr, "\nError, %s unknown input byte ordering\n\n", optarg);
-				fprintf(stderr, USAGE_STRING, argv[0]);
-				return -1;
-			}
-			break;
-		case -1:
-			//Do nothing, we have finished parsing the options
-			break;
-		case '?':
-		default:
-			fprintf(stderr, "\nError in the program command line!!\n\n");
-			fprintf(stderr, USAGE_STRING, argv[0]);
-			return -1;
-			break;
+				break;
 		}
 	} while (foundOpt >= 0);
 

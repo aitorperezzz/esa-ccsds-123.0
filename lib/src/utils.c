@@ -1,32 +1,32 @@
 /*
-Luca Fossati (Luca.Fossati@esa.int), European Space Agency
+   Luca Fossati (Luca.Fossati@esa.int), European Space Agency
 
-Software distributed under the "European Space Agency Public License � v2.0".
+   Software distributed under the "European Space Agency Public License � v2.0".
 
-All Distribution of the Software and/or Modifications, as Source Code or Object Code,
-must be, as a whole, under the terms of the European Space Agency Public License � v2.0.
-If You Distribute the Software and/or Modifications as Object Code, You must:
-(a)	provide in addition a copy of the Source Code of the Software and/or
-Modifications to each recipient; or
-(b)	make the Source Code of the Software and/or Modifications freely accessible by reasonable
-means for anyone who possesses the Object Code or received the Software and/or Modifications
-from You, and inform recipients how to obtain a copy of the Source Code.
+   All Distribution of the Software and/or Modifications, as Source Code or Object Code,
+   must be, as a whole, under the terms of the European Space Agency Public License � v2.0.
+   If You Distribute the Software and/or Modifications as Object Code, You must:
+   (a)	provide in addition a copy of the Source Code of the Software and/or
+   Modifications to each recipient; or
+   (b)	make the Source Code of the Software and/or Modifications freely accessible by reasonable
+   means for anyone who possesses the Object Code or received the Software and/or Modifications
+   from You, and inform recipients how to obtain a copy of the Source Code.
 
-The Software is provided to You on an �as is� basis and without warranties of any
-kind, including without limitation merchantability, fitness for a particular purpose,
-absence of defects or errors, accuracy or non-infringement of intellectual property
-rights.
-Except as expressly set forth in the "European Space Agency Public License � v2.0",
-neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
-incidental, or consequential damages (including without limitation loss of profit),
-however caused and on any theory of liability, arising in any way out of the use or
-Distribution of the Software or the exercise of any rights under this License, even
-if You have been advised of the possibility of such damages.
+   The Software is provided to You on an �as is� basis and without warranties of any
+   kind, including without limitation merchantability, fitness for a particular purpose,
+   absence of defects or errors, accuracy or non-infringement of intellectual property
+   rights.
+   Except as expressly set forth in the "European Space Agency Public License � v2.0",
+   neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
+   incidental, or consequential damages (including without limitation loss of profit),
+   however caused and on any theory of liability, arising in any way out of the use or
+   Distribution of the Software or the exercise of any rights under this License, even
+   if You have been advised of the possibility of such damages.
 
-*****************************************************************************************
-Miscellaneous routines to be used by the entrpy encoder and the
-predictor
-*/
+ *****************************************************************************************
+ Miscellaneous routines to be used by the entrpy encoder and the
+ predictor
+ */
 
 #ifdef WIN32
 #define _CRT_SECURE_NO_WARNINGS
@@ -151,7 +151,7 @@ long long mod_star(long long arg, long long op, int debug)
 ///write into the stream
 ///@param bits_to_write word containing the bits to be written to the stream
 void bitStream_store(unsigned char *compressed_stream, unsigned int *written_bytes,
-					 unsigned int *written_bits, unsigned int num_bits_to_write, unsigned int bits_to_write)
+		unsigned int *written_bits, unsigned int num_bits_to_write, unsigned int bits_to_write)
 {
 	int i = 0;
 	//fprintf(stderr, "bits_to_write %#x, num_bits_to_write %d\n", bits_to_write, num_bits_to_write);
@@ -177,7 +177,7 @@ void bitStream_store(unsigned char *compressed_stream, unsigned int *written_byt
 ///has to be added to the stream
 ///@param bit_to_repeat byte whose least significant bit is to be added to the stream num_bits_to_write times
 void bitStream_store_constant(unsigned char *compressed_stream, unsigned int *written_bytes,
-							  unsigned int *written_bits, unsigned int num_bits_to_write, unsigned char bit_to_repeat)
+		unsigned int *written_bits, unsigned int num_bits_to_write, unsigned char bit_to_repeat)
 {
 	unsigned int i = 0;
 	bit_to_repeat = 0x1 & bit_to_repeat;
@@ -197,7 +197,7 @@ void bitStream_store_constant(unsigned char *compressed_stream, unsigned int *wr
 ///the specified ordering, it returns the index of the same image element
 ///in an array specified using BSQ ordering.
 unsigned int indexToBSQ(interleaving_t interleaving, unsigned int interleaving_depth,
-						unsigned int x_size, unsigned int y_size, unsigned int z_size, unsigned int index)
+		unsigned int x_size, unsigned int y_size, unsigned int z_size, unsigned int index)
 {
 	unsigned int x = 0, y = 0, z = 0, reminder = 0, i = 0;
 #ifndef NDEBUG
@@ -243,7 +243,7 @@ unsigned int indexToBSQ(interleaving_t interleaving, unsigned int interleaving_d
 ///to the BSQ ordering, it returns the index of the same image element
 ///in an array ordered using the specified ordering
 unsigned int BSQToIndex(interleaving_t interleaving, unsigned int interleaving_depth,
-						unsigned int x_size, unsigned int y_size, unsigned int z_size, unsigned int index)
+		unsigned int x_size, unsigned int y_size, unsigned int z_size, unsigned int index)
 {
 	unsigned int x = 0, y = 0, z = 0, reminder = 0, i = 0;
 #ifndef NDEBUG
@@ -316,7 +316,7 @@ int write_samples(input_feature_t input_params, char fileName[128], unsigned sho
 						if (input_params.dyn_range > 8)
 						{
 							if ((is_little_endian() != 0 && input_params.byte_ordering == BIG) ||
-								(is_little_endian() == 0 && input_params.byte_ordering == LITTLE))
+									(is_little_endian() == 0 && input_params.byte_ordering == LITTLE))
 							{
 								short int temp_endianess = sample_buffer & 0xFF;
 								sample_buffer = ((unsigned short int)sample_buffer) >> 8;
@@ -333,7 +333,7 @@ int write_samples(input_feature_t input_params, char fileName[128], unsigned sho
 						if (input_params.dyn_range > 8)
 						{
 							if ((is_little_endian() != 0 && input_params.byte_ordering == BIG) ||
-								(is_little_endian() == 0 && input_params.byte_ordering == LITTLE))
+									(is_little_endian() == 0 && input_params.byte_ordering == LITTLE))
 							{
 								unsigned short int temp_endianess = sample_buffer & 0xFF;
 								sample_buffer = sample_buffer >> 8;
@@ -372,7 +372,7 @@ int write_samples(input_feature_t input_params, char fileName[128], unsigned sho
 							if (input_params.dyn_range > 8)
 							{
 								if ((is_little_endian() != 0 && input_params.byte_ordering == BIG) ||
-									(is_little_endian() == 0 && input_params.byte_ordering == LITTLE))
+										(is_little_endian() == 0 && input_params.byte_ordering == LITTLE))
 								{
 									short int temp_endianess = sample_buffer & 0xFF;
 									sample_buffer = ((unsigned short int)sample_buffer) >> 8;
@@ -389,7 +389,7 @@ int write_samples(input_feature_t input_params, char fileName[128], unsigned sho
 							if (input_params.dyn_range > 8)
 							{
 								if ((is_little_endian() != 0 && input_params.byte_ordering == BIG) ||
-									(is_little_endian() == 0 && input_params.byte_ordering == LITTLE))
+										(is_little_endian() == 0 && input_params.byte_ordering == LITTLE))
 								{
 									unsigned short int temp_endianess = sample_buffer & 0xFF;
 									sample_buffer = sample_buffer >> 8;

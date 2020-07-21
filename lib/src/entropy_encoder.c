@@ -1,34 +1,34 @@
 /*
-Luca Fossati (Luca.Fossati@esa.int), European Space Agency
+   Luca Fossati (Luca.Fossati@esa.int), European Space Agency
 
-Software distributed under the "European Space Agency Public License � v2.0".
+   Software distributed under the "European Space Agency Public License � v2.0".
 
-All Distribution of the Software and/or Modifications, as Source Code or Object Code,
-must be, as a whole, under the terms of the European Space Agency Public License � v2.0.
-If You Distribute the Software and/or Modifications as Object Code, You must:
-(a)	provide in addition a copy of the Source Code of the Software and/or
-Modifications to each recipient; or
-(b)	make the Source Code of the Software and/or Modifications freely accessible by reasonable
-means for anyone who possesses the Object Code or received the Software and/or Modifications
-from You, and inform recipients how to obtain a copy of the Source Code.
+   All Distribution of the Software and/or Modifications, as Source Code or Object Code,
+   must be, as a whole, under the terms of the European Space Agency Public License � v2.0.
+   If You Distribute the Software and/or Modifications as Object Code, You must:
+   (a)	provide in addition a copy of the Source Code of the Software and/or
+   Modifications to each recipient; or
+   (b)	make the Source Code of the Software and/or Modifications freely accessible by reasonable
+   means for anyone who possesses the Object Code or received the Software and/or Modifications
+   from You, and inform recipients how to obtain a copy of the Source Code.
 
-The Software is provided to You on an �as is� basis and without warranties of any
-kind, including without limitation merchantability, fitness for a particular purpose,
-absence of defects or errors, accuracy or non-infringement of intellectual property
-rights.
-Except as expressly set forth in the "European Space Agency Public License � v2.0",
-neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
-incidental, or consequential damages (including without limitation loss of profit),
-however caused and on any theory of liability, arising in any way out of the use or
-Distribution of the Software or the exercise of any rights under this License, even
-if You have been advised of the possibility of such damages.
+   The Software is provided to You on an �as is� basis and without warranties of any
+   kind, including without limitation merchantability, fitness for a particular purpose,
+   absence of defects or errors, accuracy or non-infringement of intellectual property
+   rights.
+   Except as expressly set forth in the "European Space Agency Public License � v2.0",
+   neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
+   incidental, or consequential damages (including without limitation loss of profit),
+   however caused and on any theory of liability, arising in any way out of the use or
+   Distribution of the Software or the exercise of any rights under this License, even
+   if You have been advised of the possibility of such damages.
 
-*****************************************************************************************
-Entropy Encoder as described in Section 5 of the CCSDS 123.0-R-1,
-White Book Draft Recommendation for Space Data System Standards on
-LOSSLESS MULTISPECTRAL & HYPERSPECTRAL IMAGE COMPRESSION
-as of 09/11/2011.
-*/
+ *****************************************************************************************
+ Entropy Encoder as described in Section 5 of the CCSDS 123.0-R-1,
+ White Book Draft Recommendation for Space Data System Standards on
+ LOSSLESS MULTISPECTRAL & HYPERSPECTRAL IMAGE COMPRESSION
+ as of 09/11/2011.
+ */
 
 #ifdef WIN32
 #define _CRT_SECURE_NO_WARNINGS
@@ -43,14 +43,14 @@ as of 09/11/2011.
 #include "predictor.h"
 
 /******************************************************
-* Routines for the Sample Adaptive Encoder
-*******************************************************/
+ * Routines for the Sample Adaptive Encoder
+ *******************************************************/
 
 /// Given a single residual and the statistics accumulated so far, it computes the code
 /// for the residual and it updates the statistics.
 int encode_pixel(unsigned int x, unsigned int y, unsigned int z, unsigned int *counter, unsigned int *accumulator,
-				 unsigned int *written_bytes, unsigned int *written_bits, unsigned char *compressed_stream, unsigned short int *residuals,
-				 input_feature_t input_params, encoder_config_t encoder_params)
+		unsigned int *written_bytes, unsigned int *written_bits, unsigned char *compressed_stream, unsigned short int *residuals,
+		input_feature_t input_params, encoder_config_t encoder_params)
 {
 	unsigned int curIndex = x + y * input_params.x_size + z * input_params.x_size * input_params.y_size;
 
@@ -121,7 +121,7 @@ int encode_pixel(unsigned int x, unsigned int y, unsigned int z, unsigned int *c
 ///the array is allocated inside this function
 ///@return a negative number if an error occurred
 int encode_sampleadaptive(input_feature_t input_params, encoder_config_t encoder_params, unsigned short int *residuals,
-						  unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits)
+		unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits)
 {
 	//First of all we proceed with the compression of the residuals according to the
 	//sample adaptive encodying method, as specified in the header of this file.
@@ -201,18 +201,18 @@ int encode_sampleadaptive(input_feature_t input_params, encoder_config_t encoder
 }
 
 /******************************************************
-* END Sample Adaptive Routines
-*******************************************************/
+ * END Sample Adaptive Routines
+ *******************************************************/
 
 /******************************************************
-* Routines for the Block Adaptive Encoder
-*******************************************************/
+ * Routines for the Block Adaptive Encoder
+ *******************************************************/
 
 /// This procedure simply computes the code corresponding to the num_zero_blocks number
 /// of sequential blocks whose samples are all 0.
 /// Such code is saved in the output bitstream.
 void zero_block_code(input_feature_t input_params, encoder_config_t encoder_params,
-					 int num_zero_blocks, unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits, int end_of_segment)
+		int num_zero_blocks, unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits, int end_of_segment)
 {
 	//First of all I have to save the ID of the zero block code option
 	if (input_params.dyn_range <= 4 && encoder_params.restricted != 0)
@@ -311,7 +311,7 @@ unsigned int compute_ksplit(input_feature_t input_params, encoder_config_t encod
 /// no compression options and encodes the block according to the code yielding
 /// the highest compression factor.
 void compute_block_code(input_feature_t input_params, encoder_config_t encoder_params,
-						unsigned short int *block_samples, unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits)
+		unsigned short int *block_samples, unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits)
 {
 	// I encode the chosen method as the value of k for k-split;
 	// second-extension is -1 and no compression -2
@@ -445,8 +445,8 @@ void compute_block_code(input_feature_t input_params, encoder_config_t encoder_p
 }
 
 int create_block(input_feature_t input_params, encoder_config_t encoder_params, unsigned short int *block_samples, int all_zero,
-				 int *num_zero_blocks, int *segment_idx, int reference_samples,
-				 unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits)
+		int *num_zero_blocks, int *segment_idx, int reference_samples,
+		unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits)
 {
 	// I have finished reading the block: we now need to pass it to the compressor, unless
 	// it is an all zero block
@@ -498,7 +498,7 @@ int create_block(input_feature_t input_params, encoder_config_t encoder_params, 
 ///the array is allocated inside this function
 ///@return a negative number if an error occurred
 int encode_block(input_feature_t input_params, encoder_config_t encoder_params, unsigned short int *residuals,
-				 unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits)
+		unsigned char *compressed_stream, unsigned int *written_bytes, unsigned int *written_bits)
 {
 	// First of all I have to pick-up the J elements composing a block and
 	// then pass them to the compressor; if a block is composed of
@@ -629,12 +629,12 @@ int encode_block(input_feature_t input_params, encoder_config_t encoder_params, 
 }
 
 /******************************************************
-* END Block Adaptive Routines
-*******************************************************/
+ * END Block Adaptive Routines
+ *******************************************************/
 
 /// Creates the header and adds it to the output stream.
 void create_header(unsigned int *written_bytes, unsigned int *written_bits, unsigned char *compressed_stream,
-				   input_feature_t input_params, predictor_config_t predictor_params, encoder_config_t encoder_params)
+		input_feature_t input_params, predictor_config_t predictor_params, encoder_config_t encoder_params)
 {
 	/* IMAGE METADATA */
 	// User defined data
@@ -775,18 +775,18 @@ void create_header(unsigned int *written_bytes, unsigned int *written_bits, unsi
 		// block size
 		switch (encoder_params.block_size)
 		{
-		case 8:
-			bitStream_store(compressed_stream, written_bytes, written_bits, 2, 0x0);
-			break;
-		case 16:
-			bitStream_store(compressed_stream, written_bytes, written_bits, 2, 0x1);
-			break;
-		case 32:
-			bitStream_store(compressed_stream, written_bytes, written_bits, 2, 0x2);
-			break;
-		case 64:
-			bitStream_store(compressed_stream, written_bytes, written_bits, 2, 0x3);
-			break;
+			case 8:
+				bitStream_store(compressed_stream, written_bytes, written_bits, 2, 0x0);
+				break;
+			case 16:
+				bitStream_store(compressed_stream, written_bytes, written_bits, 2, 0x1);
+				break;
+			case 32:
+				bitStream_store(compressed_stream, written_bytes, written_bits, 2, 0x2);
+				break;
+			case 64:
+				bitStream_store(compressed_stream, written_bytes, written_bits, 2, 0x3);
+				break;
 		}
 		// Restricted code
 		if (input_params.dyn_range <= 4 && encoder_params.restricted != 0)
@@ -808,7 +808,7 @@ void create_header(unsigned int *written_bytes, unsigned int *written_bits, unsi
 ///@return the number of bytes which compose the compressed stream, a negative value if an error
 ///occurred
 int encode(input_feature_t input_params, encoder_config_t encoder_params, predictor_config_t predictor_params,
-		   unsigned short int *residuals, char outputFile[128])
+		unsigned short int *residuals, char outputFile[128])
 {
 	// The function is pretty simple; it mainly simply parses the input files,
 	// and calls the encode_core routine. After the encoding has ended it writes the

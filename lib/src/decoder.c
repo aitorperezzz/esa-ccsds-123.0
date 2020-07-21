@@ -1,33 +1,33 @@
 
 /*
-Luca Fossati (Luca.Fossati@esa.int), European Space Agency
+   Luca Fossati (Luca.Fossati@esa.int), European Space Agency
 
-Software distributed under the "European Space Agency Public License  v2.0".
+   Software distributed under the "European Space Agency Public License  v2.0".
 
-All Distribution of the Software and/or Modifications, as Source Code or Object Code,
-must be, as a whole, under the terms of the European Space Agency Public License  v2.0.
-If You Distribute the Software and/or Modifications as Object Code, You must:
-(a) provide in addition a copy of the Source Code of the Software and/or
-Modifications to each recipient; or
-(b) make the Source Code of the Software and/or Modifications freely accessible by reasonable
-means for anyone who possesses the Object Code or received the Software and/or Modifications
-from You, and inform recipients how to obtain a copy of the Source Code.
+   All Distribution of the Software and/or Modifications, as Source Code or Object Code,
+   must be, as a whole, under the terms of the European Space Agency Public License  v2.0.
+   If You Distribute the Software and/or Modifications as Object Code, You must:
+   (a) provide in addition a copy of the Source Code of the Software and/or
+   Modifications to each recipient; or
+   (b) make the Source Code of the Software and/or Modifications freely accessible by reasonable
+   means for anyone who possesses the Object Code or received the Software and/or Modifications
+   from You, and inform recipients how to obtain a copy of the Source Code.
 
-The Software is provided to You on an as is basis and without warranties of any
-kind, including without limitation merchantability, fitness for a particular purpose,
-absence of defects or errors, accuracy or non-infringement of intellectual property
-rights.
-Except as expressly set forth in the "European Space Agency Public License  v2.0",
-neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
-incidental, or consequential damages (including without limitation loss of profit),
-however caused and on any theory of liability, arising in any way out of the use or
-Distribution of the Software or the exercise of any rights under this License, even
-if You have been advised of the possibility of such damages.
+   The Software is provided to You on an as is basis and without warranties of any
+   kind, including without limitation merchantability, fitness for a particular purpose,
+   absence of defects or errors, accuracy or non-infringement of intellectual property
+   rights.
+   Except as expressly set forth in the "European Space Agency Public License  v2.0",
+   neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
+   incidental, or consequential damages (including without limitation loss of profit),
+   however caused and on any theory of liability, arising in any way out of the use or
+   Distribution of the Software or the exercise of any rights under this License, even
+   if You have been advised of the possibility of such damages.
 
-*****************************************************************************************
+ *****************************************************************************************
 
-XXXXXXXXXXXXXXXXXXXXXXX
-*/
+ XXXXXXXXXXXXXXXXXXXXXXX
+ */
 
 #ifdef WIN32
 #define _CRT_SECURE_NO_WARNINGS
@@ -42,11 +42,11 @@ XXXXXXXXXXXXXXXXXXXXXXX
 #include "decoder.h"
 
 /******************************************************
-* Routines for the Sample Adaptive Encoder
-*******************************************************/
+ * Routines for the Sample Adaptive Encoder
+ *******************************************************/
 /// Reads a compressed sample when compressed using the sample adaptive encoding method.
 int read_element_sample(FILE *compressedStream, encoder_config_t encoder_params, input_feature_t input_params,
-						unsigned int temp_k, unsigned char *buffer, unsigned int *buffer_len)
+		unsigned int temp_k, unsigned char *buffer, unsigned int *buffer_len)
 {
 	int sample = 0;
 	unsigned int divisor = read_fs(compressedStream, encoder_params.u_max, buffer, buffer_len);
@@ -89,7 +89,7 @@ int read_element_sample(FILE *compressedStream, encoder_config_t encoder_params,
 /// method: it iterates over the various compressed samples, calling read_element_sample to extract
 /// each of them from the compressed stream
 int decode_sample_adaptive(FILE *compressedStream, input_feature_t input_params, encoder_config_t encoder_params,
-						   unsigned short int *residuals)
+		unsigned short int *residuals)
 {
 	unsigned int read_elems = 0;
 	unsigned char buffer = 0;
@@ -123,7 +123,7 @@ int decode_sample_adaptive(FILE *compressedStream, input_feature_t input_params,
 	{
 		unsigned int temp_sample = 0;
 		unsigned int BSQidx = indexToBSQ(encoder_params.out_interleaving, encoder_params.out_interleaving_depth,
-										 input_params.x_size, input_params.y_size, input_params.z_size, read_elems);
+				input_params.x_size, input_params.y_size, input_params.z_size, read_elems);
 		if ((BSQidx % (band_size)) == 0)
 		{
 			// uncompressed element
@@ -178,19 +178,19 @@ int decode_sample_adaptive(FILE *compressedStream, input_feature_t input_params,
 }
 
 /******************************************************
-* Routines for the Block Adaptive Encoder
-*******************************************************/
+ * Routines for the Block Adaptive Encoder
+ *******************************************************/
 /// Reads a compressed block when using the block adaptive encoding method.
 int read_nocomp_block(input_feature_t input_params, encoder_config_t encoder_params, FILE *compressedStream,
-					  unsigned short int *residuals, unsigned int *read_elems, unsigned char *buffer,
-					  unsigned int *buffer_len, unsigned int block_size)
+		unsigned short int *residuals, unsigned int *read_elems, unsigned char *buffer,
+		unsigned int *buffer_len, unsigned int block_size)
 {
 	// no compression applied
 	unsigned int i = 0;
 	for (i = 0; i < block_size; i++)
 	{
 		residuals[indexToBSQ(encoder_params.out_interleaving, encoder_params.out_interleaving_depth,
-							 input_params.x_size, input_params.y_size, input_params.z_size, *read_elems + i)] =
+				input_params.x_size, input_params.y_size, input_params.z_size, *read_elems + i)] =
 			read_bits(compressedStream, input_params.dyn_range, buffer, buffer_len);
 	}
 	*read_elems += block_size;
@@ -209,8 +209,8 @@ void decorrelate(unsigned int value, unsigned int *a, unsigned int *b)
 }
 
 int read_second_block(input_feature_t input_params, encoder_config_t encoder_params, FILE *compressedStream,
-					  unsigned short int *residuals, unsigned int *read_elems, unsigned char *buffer,
-					  unsigned int *buffer_len, unsigned int block_size)
+		unsigned short int *residuals, unsigned int *read_elems, unsigned char *buffer,
+		unsigned int *buffer_len, unsigned int block_size)
 {
 	unsigned int second_extension_values[32];
 	unsigned int i = 0;
@@ -226,9 +226,9 @@ int read_second_block(input_feature_t input_params, encoder_config_t encoder_par
 		unsigned int cur_value = second_extension_values[i / 2];
 		decorrelate(cur_value, &a, &b);
 		residuals[indexToBSQ(encoder_params.out_interleaving, encoder_params.out_interleaving_depth,
-							 input_params.x_size, input_params.y_size, input_params.z_size, *read_elems + i)] = b + a - cur_value;
+				input_params.x_size, input_params.y_size, input_params.z_size, *read_elems + i)] = b + a - cur_value;
 		residuals[indexToBSQ(encoder_params.out_interleaving, encoder_params.out_interleaving_depth,
-							 input_params.x_size, input_params.y_size, input_params.z_size, *read_elems + i + 1)] = cur_value - a;
+				input_params.x_size, input_params.y_size, input_params.z_size, *read_elems + i + 1)] = cur_value - a;
 	}
 	*read_elems += block_size;
 
@@ -236,8 +236,8 @@ int read_second_block(input_feature_t input_params, encoder_config_t encoder_par
 }
 
 int read_ksplit_block(input_feature_t input_params, encoder_config_t encoder_params, FILE *compressedStream,
-					  unsigned int k, unsigned short int *residuals, unsigned int *read_elems,
-					  unsigned char *buffer, unsigned int *buffer_len, unsigned int block_size)
+		unsigned int k, unsigned short int *residuals, unsigned int *read_elems,
+		unsigned char *buffer, unsigned int *buffer_len, unsigned int block_size)
 {
 	// The various elements are simply saved with the FS code of the
 	// result of the division and, then, the k-bits of the reminder
@@ -256,14 +256,14 @@ int read_ksplit_block(input_feature_t input_params, encoder_config_t encoder_par
 	for (i = 0; i < block_size; i++)
 	{
 		residuals[indexToBSQ(encoder_params.out_interleaving, encoder_params.out_interleaving_depth,
-							 input_params.x_size, input_params.y_size, input_params.z_size, *read_elems + i)] =
+				input_params.x_size, input_params.y_size, input_params.z_size, *read_elems + i)] =
 			(division_result[i] << k) | reminders[i];
 	}
 	*read_elems += block_size;
 	return 0;
 }
 int read_zero_block(input_feature_t input_params, encoder_config_t encoder_params, FILE *compressedStream,
-					unsigned short int *residuals, unsigned int *read_elems, unsigned char *buffer, unsigned int *buffer_len)
+		unsigned short int *residuals, unsigned int *read_elems, unsigned char *buffer, unsigned int *buffer_len)
 {
 	// While for the other options I always decode one block at a time, here
 	// I might need to decode more than one block
@@ -298,7 +298,7 @@ int read_zero_block(input_feature_t input_params, encoder_config_t encoder_param
 /// method: it determines the compression method for the block and the calls the appropriate
 /// routine for its decoding.
 int decode_block_adaptive(FILE *compressedStream, input_feature_t input_params,
-						  encoder_config_t encoder_params, unsigned short int *residuals)
+		encoder_config_t encoder_params, unsigned short int *residuals)
 {
 	unsigned int compression_id = 0;
 	unsigned int mask = 0;
@@ -348,7 +348,7 @@ int decode_block_adaptive(FILE *compressedStream, input_feature_t input_params,
 			{
 				// zero compression
 				if (read_zero_block(input_params, encoder_params, compressedStream, residuals,
-									&read_elems, &buffer, &buffer_len) != 0)
+							&read_elems, &buffer, &buffer_len) != 0)
 				{
 					fprintf(stderr, "Error in reading the zero block\n");
 					return -1;
@@ -358,7 +358,7 @@ int decode_block_adaptive(FILE *compressedStream, input_feature_t input_params,
 			{
 				//second extension
 				if (read_second_block(input_params, encoder_params, compressedStream, residuals, &read_elems,
-									  &buffer, &buffer_len, cur_block_size) != 0)
+							&buffer, &buffer_len, cur_block_size) != 0)
 				{
 					fprintf(stderr, "Error in reading the second block\n");
 					return -1;
@@ -372,7 +372,7 @@ int decode_block_adaptive(FILE *compressedStream, input_feature_t input_params,
 			{
 				//no compression
 				if (read_nocomp_block(input_params, encoder_params, compressedStream, residuals, &read_elems, &buffer,
-									  &buffer_len, cur_block_size) != 0)
+							&buffer_len, cur_block_size) != 0)
 				{
 					fprintf(stderr, "Error in reading the no compression\n");
 					return -1;
@@ -382,7 +382,7 @@ int decode_block_adaptive(FILE *compressedStream, input_feature_t input_params,
 			{
 				// FS (i.e. k-split with with K=0)
 				if (read_ksplit_block(input_params, encoder_params, compressedStream, 0, residuals, &read_elems,
-									  &buffer, &buffer_len, cur_block_size) != 0)
+							&buffer, &buffer_len, cur_block_size) != 0)
 				{
 					fprintf(stderr, "Error in reading the ksplit block with k = 0\n");
 					return -1;
@@ -393,7 +393,7 @@ int decode_block_adaptive(FILE *compressedStream, input_feature_t input_params,
 		{
 			// no compression
 			if (read_nocomp_block(input_params, encoder_params, compressedStream, residuals, &read_elems,
-								  &buffer, &buffer_len, cur_block_size) != 0)
+						&buffer, &buffer_len, cur_block_size) != 0)
 			{
 				fprintf(stderr, "Error in reading the no compression\n");
 				return -1;
@@ -403,7 +403,7 @@ int decode_block_adaptive(FILE *compressedStream, input_feature_t input_params,
 		{
 			// k-split with k = (compression_id - 1)
 			if (read_ksplit_block(input_params, encoder_params, compressedStream, compression_id - 1,
-								  residuals, &read_elems, &buffer, &buffer_len, cur_block_size) != 0)
+						residuals, &read_elems, &buffer, &buffer_len, cur_block_size) != 0)
 			{
 				fprintf(stderr, "Error in reading the ksplit block with k = %d\n", compression_id - 1);
 				return -1;
@@ -423,7 +423,7 @@ int decode_block_adaptive(FILE *compressedStream, input_feature_t input_params,
 
 /// Reads the compressed file header, filling-in the appropriate data structures
 int read_header(FILE *compressedStream, input_feature_t *input_params, encoder_config_t *encoder_params,
-				predictor_config_t *predictor_params)
+		predictor_config_t *predictor_params)
 {
 	unsigned char buffer = 0;
 	unsigned char temp = 0;
@@ -549,9 +549,9 @@ int read_header(FILE *compressedStream, input_feature_t *input_params, encoder_c
 					for (cz = 0; cz < MIN(predictor_params->pred_bands + 3, z + 3); cz++)
 					{
 						predictor_params->weight_init_table[z][cz] = sign_extend(read_bits(compressedStream,
-																						   predictor_params->weight_init_resolution, &temp,
-																						   &temp_len),
-																				 predictor_params->weight_init_resolution);
+									predictor_params->weight_init_resolution, &temp,
+									&temp_len),
+								predictor_params->weight_init_resolution);
 					}
 				}
 				else
@@ -559,9 +559,9 @@ int read_header(FILE *compressedStream, input_feature_t *input_params, encoder_c
 					for (cz = 0; cz < MIN(predictor_params->pred_bands, z); cz++)
 					{
 						predictor_params->weight_init_table[z][cz] = sign_extend(read_bits(compressedStream,
-																						   predictor_params->weight_init_resolution, &temp,
-																						   &temp_len),
-																				 predictor_params->weight_init_resolution);
+									predictor_params->weight_init_resolution, &temp,
+									&temp_len),
+								predictor_params->weight_init_resolution);
 					}
 				}
 			}
@@ -621,18 +621,18 @@ int read_header(FILE *compressedStream, input_feature_t *input_params, encoder_c
 		// block size
 		switch ((buffer >> 5) & 0x3)
 		{
-		case 0:
-			encoder_params->block_size = 8;
-			break;
-		case 1:
-			encoder_params->block_size = 16;
-			break;
-		case 2:
-			encoder_params->block_size = 32;
-			break;
-		case 3:
-			encoder_params->block_size = 64;
-			break;
+			case 0:
+				encoder_params->block_size = 8;
+				break;
+			case 1:
+				encoder_params->block_size = 16;
+				break;
+			case 2:
+				encoder_params->block_size = 32;
+				break;
+			case 3:
+				encoder_params->block_size = 64;
+				break;
 		}
 		// Restricted code
 		if ((buffer & 0x10) != 0)
