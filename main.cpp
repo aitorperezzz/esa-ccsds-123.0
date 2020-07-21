@@ -7,7 +7,7 @@
 #include "decompress.h"
 
 #define SIZE_Z 30 /* Number of wavelengths */
-#define INPUT "small_surface.jpg.raw" /* Text file where the image samples are stored, row after row, as integer numbers. */
+#define INPUT "test_images/small_surface.jpg.raw" /* Text file where the image samples are stored, row after row, as integer numbers. */
 #define ORIGINAL "original.arr" /* Binary file to store the original image. */
 #define COMPRESSED "compressed.arr" /* Binary file to store the compressed image. */
 #define DECOMPRESSED "decompressed.arr" /* Binary file to store the decompressed image. */
