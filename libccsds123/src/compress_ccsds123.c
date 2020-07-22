@@ -4,10 +4,12 @@
 #include <math.h>
 #include <time.h>
 
+#include "compress_ccsds123.h"
 #include "entropy_encoder.h"
 #include "utils.h"
 #include "predictor.h"
-#include "compress.h"
+
+// Implementation of public functions.
 
 int compress(compressConfig_t *config)
 {
@@ -147,8 +149,8 @@ int compress(compressConfig_t *config)
 		return -1;
 	}
 
-	// Now can allocate the accumulation constant table, either
-	// with all constant values or with the specified accumulator table
+	// Now I can allocate the accumulation constant table, either
+	// with all constant values or with the specified accumulator table.
 	if ((config->encoder_params.k_init = (unsigned int *)malloc(config->input_params.z_size * sizeof(unsigned int))) == NULL)
 	{
 		fprintf(stderr, "\nError, in allocating the accumulator initialization table\n\n");
@@ -200,7 +202,7 @@ int compress(compressConfig_t *config)
 		}
 	}
 
-	// *********************** 
+	// ***********************
 	// Here is the actual compression algorithm.
 
 	// Create space for the residuals.
@@ -226,7 +228,7 @@ int compress(compressConfig_t *config)
 	{
 		// Dumps the residuals as unsigned short int (16 bits each) in little endian format in
 		// BIP order
-		char residuals_name[100];
+		char residuals_name[200];
 		FILE *residuals_file = NULL;
 		int x = 0, y = 0, z = 0;
 		sprintf(residuals_name, "residuals_%s.bip", config->out_file);
@@ -250,6 +252,8 @@ int compress(compressConfig_t *config)
 
 	// Close the prediction statistics.
 	predictionEndTime = ((double)clock()) / CLOCKS_PER_SEC;
+
+	// Perform encoding and close the compression statistics.
 	compressed_bytes = encode(config->input_params, config->encoder_params, config->predictor_params, residuals, config->out_file);
 	compressionEndTime = ((double)clock()) / CLOCKS_PER_SEC;
 

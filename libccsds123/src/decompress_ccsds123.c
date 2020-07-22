@@ -1,10 +1,12 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "decompress.h"
+#include "decompress_ccsds123.h"
 #include "utils.h"
 #include "unpredict.h"
 #include "decoder.h"
+
+// Implementation of public functions.
 
 int decompress(decompressConfig_t *config)
 {
@@ -26,8 +28,10 @@ int decompress(decompressConfig_t *config)
 		return -1;
 	}
 
-	// Mark the begin of the decoding stage and start it.
+	// Start the decoding time statistics.
 	decodingStartTime = ((double)clock()) / CLOCKS_PER_SEC;
+
+	// Perform decoding.
 	if (decode(&config->input_params, &config->predictor_params, &residuals, config->in_file))
 	{
 		fprintf(stderr, "Error during the decoding stage\n");
@@ -41,7 +45,7 @@ int decompress(decompressConfig_t *config)
 	{
 		// Dumps the residuals as unsigned short int (16 bits each) in little endian format in
 		// BIP order
-		char residuals_name[100];
+		char residuals_name[200];
 		FILE *residuals_file = NULL;
 		unsigned int x = 0, y = 0, z = 0;
 		sprintf(residuals_name, "residuals_%s.bip", config->out_file);
@@ -64,6 +68,8 @@ int decompress(decompressConfig_t *config)
 		}
 		fclose(residuals_file);
 	}
+
+	// Close the decoding statistics.
 	decodingEndTime = ((double)clock()) / CLOCKS_PER_SEC;
 
 	// Go through the unpredict routine.
@@ -74,12 +80,15 @@ int decompress(decompressConfig_t *config)
 			free(residuals);
 		return -1;
 	}
+
+	// Close the unpredict statistics.
 	unpredictionEndTime = ((double)clock()) / CLOCKS_PER_SEC;
 
+	// Free up memory if needed.
 	if (residuals != NULL)
 		free(residuals);
 
-	// Finally print some stats of the decompression process.
+	// Finally print some stats.
 	printf("Overall Decompression duration %lf (sec)\n", unpredictionEndTime - decodingStartTime);
 	printf("Decoding duration %lf (sec)\n", decodingEndTime - decodingStartTime);
 	printf("Unprediction duration %lf (sec)\n", unpredictionEndTime - decodingEndTime);

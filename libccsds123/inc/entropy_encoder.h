@@ -41,40 +41,40 @@ extern "C"
 #include "utils.h"
 #include "predictor.h"
 
-	typedef enum
-	{
-		SAMPLE,
-		BLOCK
-	} encoder_t;
+typedef enum
+{
+	SAMPLE,
+	BLOCK
+} encoder_t;
 
-	///Type representing the configuration of the encoder algorithm
-	typedef struct encoder_config
-	{
-		unsigned int u_max;
-		unsigned int y_star;
-		unsigned int y_0;
-		unsigned int k;
-		unsigned int *k_init;
-		interleaving_t out_interleaving;
-		unsigned int out_interleaving_depth;
-		unsigned int out_wordsize;
-		encoder_t encoding_method;
-		unsigned char block_size;
-		unsigned char restricted;
-		unsigned int ref_interval;
-	} encoder_config_t;
+///Type representing the configuration of the encoder algorithm
+typedef struct encoder_config
+{
+	unsigned int u_max;
+	unsigned int y_star;
+	unsigned int y_0;
+	unsigned int k;
+	unsigned int *k_init;
+	interleaving_t out_interleaving;
+	unsigned int out_interleaving_depth;
+	unsigned int out_wordsize;
+	encoder_t encoding_method;
+	unsigned char block_size;
+	unsigned char restricted;
+	unsigned int ref_interval;
+} encoder_config_t;
 
-	///Main function for the entropy encoding of a given input file; while it works for any input file,
-	///it is though to be used when the input file encodes the residuals of each pixel of an image after
-	///the lossless compression step
-	///@param input_params describe the image whose residuals are contained in the input file
-	///@param encoder_params set of options determining the behavior of the encoder
-	///@param inputFile file containing the information to be compressed
-	///@param outputFile file where the compressed information will be stored
-	///@return the number of bytes which compose the compressed stream, a negative value if an error
-	///occurred
-	int encode(input_feature_t input_params, encoder_config_t encoder_params, predictor_config_t predictor_params,
-			unsigned short int *residuals, char outputFile[128]);
+///Main function for the entropy encoding of a given input file; while it works for any input file,
+///it is though to be used when the input file encodes the residuals of each pixel of an image after
+///the lossless compression step
+///@param input_params describe the image whose residuals are contained in the input file
+///@param encoder_params set of options determining the behavior of the encoder
+///@param inputFile file containing the information to be compressed
+///@param outputFile file where the compressed information will be stored
+///@return the number of bytes which compose the compressed stream, a negative value if an error
+///occurred
+int encode(input_feature_t input_params, encoder_config_t encoder_params, predictor_config_t predictor_params,
+		unsigned short int *residuals, char outputFile[128]);
 
 #endif
 

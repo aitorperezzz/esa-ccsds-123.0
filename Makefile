@@ -1,86 +1,31 @@
-# Luca Fossati (Luca.Fossati@esa.int), European Space Agency
-
-# Software distributed under the "European Space Agency Public License � v2.0".
-
-# All Distribution of the Software and/or Modifications, as Source Code or Object Code,
-# must be, as a whole, under the terms of the European Space Agency Public License � v2.0.
-# If You Distribute the Software and/or Modifications as Object Code, You must:
-# (a)	provide in addition a copy of the Source Code of the Software and/or
-# Modifications to each recipient; or
-# (b)	make the Source Code of the Software and/or Modifications freely accessible by reasonable
-# means for anyone who possesses the Object Code or received the Software and/or Modifications
-# from You, and inform recipients how to obtain a copy of the Source Code.
-
-# The Software is provided to You on an �as is� basis and without warranties of any
-# kind, including without limitation merchantability, fitness for a particular purpose,
-# absence of defects or errors, accuracy or non-infringement of intellectual property
-# rights.
-# Except as expressly set forth in the "European Space Agency Public License � v2.0",
-# neither Licensor nor any Contributor shall be liable, including, without limitation, for direct, indirect,
-# incidental, or consequential damages (including without limitation loss of profit),
-# however caused and on any theory of liability, arising in any way out of the use or
-# Distribution of the Software or the exercise of any rights under this License, even
-# if You have been advised of the possibility of such damages.
-#
-
-LINK_FLAGS=-lm
-#CCFLAGS=-O2 -finline-functions -pipe -march=native -fomit-frame-pointer -DNDEBUG
-#CCFLAGS=-g3 -Wall
-CCFLAGS=-g -Wall -Iinc
+# Compiler and linker.
 CC=g++
 
-#all: compressor converter decompressor
-all: test
+# Name of the target executable.
+TARGET=test
 
-#compressor_main.o: ../compressor_main.c ../entropy_encoder.h ../predictor.h Makefile
-#	$(CC) $(CCFLAGS) -DNO_COMPUTE_LOCAL -c -o compressor_main.o ../compressor_main.c
+# Compiler flags.
+CCFLAGS=-g -Wall -I./libccsds123/inc
 
-#converter.o: ../converter.c ../entropy_encoder.h ../predictor.h Makefile
-#	$(CC) $(CCFLAGS) -DNO_COMPUTE_LOCAL -c -o converter.o ../converter.c
+# Paths for the libraries needed at linking time 
+# (library should be compiled and available there).
+LIBPATHS=-L./libccsds123
 
-obj/entropy_encoder.o: src/entropy_encoder.c inc/entropy_encoder.h inc/predictor.h inc/utils.h Makefile
-	$(CC) $(CCFLAGS) -DNO_COMPUTE_LOCAL -c -o obj/entropy_encoder.o src/entropy_encoder.c
+# Specific library name.
+LDFLAGS=-l:libccsds123.so
 
-obj/predictor.o: src/predictor.c inc/predictor.h inc/utils.h Makefile
-	$(CC) $(CCFLAGS) -DNO_COMPUTE_LOCAL -c -o obj/predictor.o src/predictor.c
+# Objects needed for the project.
+OBJECTS=main.o
 
-obj/predictor_nolocal.o: src/predictor.c inc/predictor.h inc/utils.h Makefile
-	$(CC) $(CCFLAGS) -DNO_COMPUTE_LOCAL -c -o obj/predictor_nolocal.o src/predictor.c
+.PHONY: all clean
 
-obj/utils.o: src/utils.c inc/utils.h Makefile
-	$(CC) $(CCFLAGS) -c -o obj/utils.o src/utils.c
+all: $(TARGET)
 
-#decompressor_main.o: ../decompressor_main.c ../utils.h ../unpredict.h ../decoder.h Makefile
-#	$(CC) $(CCFLAGS) -DNO_COMPUTE_LOCAL -c -o decompressor_main.o ../decompressor_main.c
+$(TARGET): $(OBJECTS)
+	$(CC) $(CCFLAGS) $(OBJECTS) -o $(TARGET) $(LIBPATHS) $(LDFLAGS)
 
-obj/unpredict.o: src/unpredict.c inc/unpredict.h inc/utils.h inc/predictor.h Makefile
-	$(CC) $(CCFLAGS) -DNO_COMPUTE_LOCAL -c -o obj/unpredict.o src/unpredict.c
-
-obj/decoder.o: src/decoder.c inc/decoder.h inc/utils.h Makefile
-	$(CC) $(CCFLAGS) -c -o obj/decoder.o src/decoder.c
-
-obj/compress.o: compress.c compress.h inc/utils.h inc/entropy_encoder.h inc/predictor.h Makefile
-	$(CC) $(CCFLAGS) -c -o obj/compress.o compress.c
-
-obj/decompress.o: decompress.c decompress.h inc/utils.h inc/unpredict.h inc/decoder.h Makefile
-	$(CC) $(CCFLAGS) -c -o obj/decompress.o decompress.c
-
-obj/main.o: main.cpp compress.h decompress.h Makefile
-	$(CC) $(CCFLAGS) -c -o obj/main.o main.cpp
-
-#decompressor: decompressor_main.o utils.o unpredict.o decoder.o predictor_nolocal.o Makefile
-#	$(CC) $(CCFLAGS) -o decompressor decompressor_main.o unpredict.o decoder.o predictor_nolocal.o utils.o $(LINK_FLAGS)
-
-#compressor: compressor_main.o entropy_encoder.o predictor.o utils.o Makefile
-#	$(CC) $(CCFLAGS) -o compressor compressor_main.o entropy_encoder.o predictor.o utils.o $(LINK_FLAGS)
-
-#converter: converter.o entropy_encoder.o predictor.o utils.o Makefile
-#	$(CC) $(CCFLAGS) -o converter converter.o entropy_encoder.o predictor.o utils.o $(LINK_FLAGS)
-
-test: obj/main.o obj/compress.o obj/decompress.o obj/entropy_encoder.o obj/predictor.o obj/decoder.o obj/unpredict.o obj/utils.o Makefile
-	$(CC) $(CCFLAGS) -o test obj/main.o obj/compress.o obj/decompress.o obj/decoder.o obj/unpredict.o obj/entropy_encoder.o obj/predictor.o obj/utils.o $(LINK_FLAGS)
+main.o: main.cpp Makefile libccsds123/inc/compress_ccsds123.h libccsds123/inc/decompress_ccsds123.h
+	$(CC) $(CCFLAGS) -c -o main.o main.cpp
 
 clean:
-#	rm -rf compressor converter decompressor *.o *~ ../*~
-	-rm -rf obj/*
-	-rm test
+	-rm -f $(TARGET) $(OBJECTS)

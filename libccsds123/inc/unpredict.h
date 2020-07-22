@@ -39,12 +39,12 @@ extern "C"
 #include "utils.h"
 #include "predictor.h"
 
-	/// Given the mapped residual and the prediction it extracts the original sample
-	unsigned short int get_sample(unsigned short int residual, int scaled_predicted, unsigned int s_min, unsigned int s_maxs);
+/// Given the mapped residual and the prediction it extracts the original sample
+unsigned short int get_sample(unsigned short int residual, int scaled_predicted, unsigned int s_min, unsigned int s_maxs);
 
-	/// Given the mapped residuals saved in BSQ format it iterates over them, computing
-	/// the prediction and, then extracting the original sample.
-	int unpredict(input_feature_t input_params, predictor_config_t predictor_params, unsigned short int *residuals, char outputFile[128]);
+/// Given the mapped residuals saved in BSQ format it iterates over them, computing
+/// the prediction and, then extracting the original sample.
+int unpredict(input_feature_t input_params, predictor_config_t predictor_params, unsigned short int *residuals, char outputFile[128]);
 
 #endif
 

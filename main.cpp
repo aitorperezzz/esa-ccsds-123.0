@@ -3,8 +3,8 @@
 #include <string.h>
 #include "boost/multi_array.hpp"
 
-#include "compress.h"
-#include "decompress.h"
+#include "compress_ccsds123.h"
+#include "decompress_ccsds123.h"
 
 #define SIZE_Z 30 /* Number of wavelengths */
 #define INPUT "test_images/small_surface.jpg.raw" /* Text file where the image samples are stored, row after row, as integer numbers. */
