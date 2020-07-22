@@ -1,4 +1,4 @@
 *.o
 test
-*.arr
+test_results/
 .vscode/
