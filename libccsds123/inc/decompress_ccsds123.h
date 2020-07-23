@@ -45,7 +45,7 @@ typedef struct decompressConfig
  * @retval 0 if decompression went OK.
  * @retval -1 if decompression ran into any problem.
  */
-int decompress(decompressConfig_t *config);
+int decompress_ccsds123(decompressConfig_t *config);
 
 #endif
 

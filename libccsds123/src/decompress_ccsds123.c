@@ -8,7 +8,7 @@
 
 // Implementation of public functions.
 
-int decompress(decompressConfig_t *config)
+int decompress_ccsds123(decompressConfig_t *config)
 {
 	// Initialize some variables.
 	double decodingStartTime = 0.0;

@@ -120,7 +120,7 @@ int main(void) {
 
 		// Perform the actual compression.
 		std::cout << "\nCompressing..." << std::endl;
-		if (compress(&config) != 0) {
+		if (compress_ccsds123(&config) != 0) {
 			std::cout << "ERROR: there was a problem during compression" << std::endl;
 			return -1;
 		}
@@ -141,7 +141,7 @@ int main(void) {
 
 		// Perform the decompression algorithm.
 		std::cout << "\nDecompressing..." << std::endl;
-		if (decompress(&decompressConfig) != 0) {
+		if (decompress_ccsds123(&decompressConfig) != 0) {
 			std::cout << "ERROR: there was a problem during decompression" << std::endl;
 			return -1;
 		}

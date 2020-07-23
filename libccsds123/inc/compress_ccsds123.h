@@ -50,7 +50,7 @@ typedef struct compressConfig
  * @retval 0 if compression went OK.
  * @retval -1 if compression ran into any problem.
  */
-int compress(compressConfig_t *config);
+int compress_ccsds123(compressConfig_t *config);
 
 #endif
 

@@ -11,7 +11,7 @@
 
 // Implementation of public functions.
 
-int compress(compressConfig_t *config)
+int compress_ccsds123(compressConfig_t *config)
 {
 	// Create some variables for statistic purposes.
 	double compressionStartTime = 0.0;
