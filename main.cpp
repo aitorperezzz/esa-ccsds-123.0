@@ -56,8 +56,8 @@ int writeSamplesToBinaryFile(const Image &image, const std::string filename);
 int main(void) {
 
 	// Store the names of the test images and create the results folder.
-	int numTests = 3;
-	std::string testFiles[numTests] = {INPUT_SMALL, INPUT_MEDIUM, INPUT_LARGE};
+	int numTests = 2;
+	std::string testFiles[numTests] = {INPUT_SMALL, INPUT_MEDIUM};
 	if (mkdir(RESULTS_FOLDER, 0777) != 0 && errno != EEXIST) {
 		std::cout << "ERROR: could not create the results folder" << std::endl;
 		return -1;

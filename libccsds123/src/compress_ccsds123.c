@@ -202,10 +202,9 @@ int compress_ccsds123(compressConfig_t *config)
 		}
 	}
 
-	// ***********************
 	// Here is the actual compression algorithm.
 
-	// Create space for the residuals.
+	// Allocate memory for the residuals.
 	residuals = (unsigned short int *)malloc(sizeof(unsigned short int) * config->input_params.x_size * config->input_params.y_size * config->input_params.z_size);
 	if (residuals == NULL)
 	{

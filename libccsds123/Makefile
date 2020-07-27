@@ -5,7 +5,7 @@ CC=gcc
 TARGET=libccsds123.so
 
 # Compiler flags.
-CCFLAGS=-I./inc -fPIC
+CCFLAGS=-g -I./inc -fPIC
 
 # Linker flags.
 LDFLAGS=-shared

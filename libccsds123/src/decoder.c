@@ -1,4 +1,3 @@
-
 /*
    Luca Fossati (Luca.Fossati@esa.int), European Space Agency
 
@@ -40,6 +39,11 @@
 
 #include "utils.h"
 #include "decoder.h"
+
+// Declaration of private functions.
+// This function frees memory inside a encoder_config_t struct after decoding
+// or if there is any problem during decoding.
+int freeDecoderMemory(encoder_config_t *encoder_config);
 
 /******************************************************
  * Routines for the Sample Adaptive Encoder
@@ -110,6 +114,7 @@ int decode_sample_adaptive(FILE *compressedStream, input_feature_t input_params,
 	if (accumulator == NULL)
 	{
 		fprintf(stderr, "Error in the allocation of the accumulator statistic\n\n");
+		free(counter);
 		return -1;
 	}
 	for (i = 0; i < input_params.z_size; i++)
@@ -158,6 +163,8 @@ int decode_sample_adaptive(FILE *compressedStream, input_feature_t input_params,
 		if (temp_sample == (unsigned int)-1)
 		{
 			fprintf(stderr, "Error in reading sample with BSQidx = %d, element %d\n", BSQidx, read_elems);
+			free(counter);
+			free(accumulator);
 			return -1;
 		}
 #endif
@@ -170,10 +177,14 @@ int decode_sample_adaptive(FILE *compressedStream, input_feature_t input_params,
 	if (read_elems < samplesNum)
 	{
 		fprintf(stderr, "Error read only %d samples out of %d\n", read_elems, samplesNum);
+		free(counter);
+		free(accumulator);
 		return -1;
 	}
 #endif
 
+	free(counter);
+	free(accumulator);
 	return 0;
 }
 
@@ -702,7 +713,7 @@ int read_header(FILE *compressedStream, input_feature_t *input_params, encoder_c
 }
 
 /// Main decoder function, from the file containing the compressed stream it produces the
-/// file containins the mapped residuals, stored in BSQ format.
+/// file containing the mapped residuals, stored in BSQ format.
 int decode(input_feature_t *input_params, predictor_config_t *predictor_params, unsigned short int **residuals, char inputFile[128])
 {
 	FILE *compressedStream = NULL;
@@ -720,16 +731,20 @@ int decode(input_feature_t *input_params, predictor_config_t *predictor_params, 
 	if (*residuals == NULL)
 	{
 		fprintf(stderr, "Error in allocating %lf kBytes for the residuals\n\n", ((double)sizeof(unsigned short int) * input_params->x_size * input_params->y_size * input_params->z_size) / 1024.0);
+		fclose(compressedStream);
+		freeDecoderMemory(&encoder_params);
 		return -1;
 	}
 	memset(*residuals, 0, sizeof(unsigned short int) * input_params->x_size * input_params->y_size * input_params->z_size);
 
-	// Now it is finally time to decode the stream. accodring to the used encoding method
+	// Now it is finally time to decode the stream according to the used encoding method
 	if (encoder_params.encoding_method == SAMPLE)
 	{
 		if (decode_sample_adaptive(compressedStream, *input_params, encoder_params, *residuals) < 0)
 		{
 			fprintf(stderr, "Error in sample adaptive decoding\n");
+			fclose(compressedStream);
+			freeDecoderMemory(&encoder_params);
 			return -1;
 		}
 	}
@@ -738,8 +753,23 @@ int decode(input_feature_t *input_params, predictor_config_t *predictor_params, 
 		if (decode_block_adaptive(compressedStream, *input_params, encoder_params, *residuals) < 0)
 		{
 			fprintf(stderr, "Error in block adaptive decoding\n");
+			fclose(compressedStream);
+			freeDecoderMemory(&encoder_params);
 			return -1;
 		}
+	}
+
+	fclose(compressedStream);
+	freeDecoderMemory(&encoder_params);
+	return 0;
+}
+
+int freeDecoderMemory(encoder_config_t *encoder_config)
+{
+	// Free encoder config memory if needed.
+	if (encoder_config->k_init != NULL)
+	{
+		free(encoder_config->k_init);
 	}
 
 	return 0;
